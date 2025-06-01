@@ -1,7 +1,13 @@
 import streamlit as st
 import os
 from dotenv import load_dotenv
-from config import get_visible_models, set_visible_models, get_pricing_visibility, set_pricing_visibility, get_max_tokens, set_max_tokens
+from config import (
+    get_visible_models, set_visible_models,
+    get_pricing_visibility, set_pricing_visibility,
+    get_max_tokens, set_max_tokens,
+    get_comparison_mode, set_comparison_mode
+)
+from model_config import MODELS # Import MODELS from model_config
 
 # Load environment variables
 load_dotenv()
@@ -18,16 +24,6 @@ st.set_page_config(
 
 # Title
 st.title("Admin Controls")
-
-# Available models
-MODELS = {
-    "DeepSeek-R1": "deepseek-r1",
-    "DeepSeek-V3-0324": "deepseek-v3-0324",
-    "GPT-4o": "gpt-4o",
-    "GPT-4o-mini": "gpt-4o-mini",
-    "O3-mini": "o3-mini",
-    "Phi-4": "phi-4"
-}
 
 # Admin login
 if 'is_admin' not in st.session_state:
@@ -48,6 +44,7 @@ else:
     current_models = get_visible_models()
     show_pricing = get_pricing_visibility()
     max_tokens = get_max_tokens()
+    comparison_mode = get_comparison_mode()
     
     # Model selection
     st.subheader("Model Settings")
@@ -66,11 +63,17 @@ else:
         help="Set the maximum number of tokens users can generate"
     )
     
-    # Pricing visibility
+    # Display Settings
     st.subheader("Display Settings")
     new_show_pricing = st.checkbox(
         "Show pricing details to users",
         value=show_pricing
+    )
+    
+    new_comparison_mode = st.checkbox(
+        "Enable side-by-side model comparison",
+        value=comparison_mode,
+        help="Allow users to run the same prompt across all visible models"
     )
     
     # Save button
@@ -78,6 +81,7 @@ else:
         set_visible_models(selected_models)
         set_max_tokens(new_max_tokens)
         set_pricing_visibility(new_show_pricing)
+        set_comparison_mode(new_comparison_mode)
         st.success("Settings saved!")
     
     # Logout button

@@ -58,4 +58,23 @@ def set_max_tokens(max_tokens):
         config = json.load(f) if os.path.exists(CONFIG_FILE) else {}
     config['max_tokens'] = max_tokens
     with open(CONFIG_FILE, 'w') as f:
+        json.dump(config, f)
+
+def get_comparison_mode():
+    """Get whether comparison mode is enabled"""
+    if os.path.exists(CONFIG_FILE):
+        try:
+            with open(CONFIG_FILE, 'r') as f:
+                config = json.load(f)
+                return config.get('comparison_mode', False)
+        except:
+            return False
+    return False
+
+def set_comparison_mode(enabled):
+    """Set whether comparison mode is enabled"""
+    with open(CONFIG_FILE, 'r') as f:
+        config = json.load(f) if os.path.exists(CONFIG_FILE) else {}
+    config['comparison_mode'] = enabled
+    with open(CONFIG_FILE, 'w') as f:
         json.dump(config, f) 
