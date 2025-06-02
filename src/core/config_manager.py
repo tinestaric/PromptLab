@@ -105,6 +105,14 @@ class ConfigManager:
     def set_comparison_mode(self, enabled: bool) -> None:
         """Set whether comparison mode is enabled."""
         self.set('comparison_mode', enabled)
+    
+    def get_generate_prompt_enabled(self) -> bool:
+        """Get whether the generate prompt feature is enabled."""
+        return self.get('generate_prompt_enabled', False)
+    
+    def set_generate_prompt_enabled(self, enabled: bool) -> None:
+        """Set whether the generate prompt feature is enabled."""
+        self.set('generate_prompt_enabled', enabled)
 
 # Global instance
 config_manager = ConfigManager()
@@ -133,3 +141,9 @@ def get_comparison_mode() -> bool:
 
 def set_comparison_mode(enabled: bool) -> None:
     config_manager.set_comparison_mode(enabled)
+
+def get_generate_prompt_enabled() -> bool:
+    return config_manager.get_generate_prompt_enabled()
+
+def set_generate_prompt_enabled(enabled: bool) -> None:
+    config_manager.set_generate_prompt_enabled(enabled)

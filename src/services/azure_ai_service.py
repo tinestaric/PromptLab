@@ -144,6 +144,34 @@ class AzureAIService:
         
         return responses
 
+    def generate_system_prompt(
+        self,
+        user_description: str
+    ) -> str:
+        """Generate a system prompt based on user description using GPT-4o."""
+        try:
+            # Always use GPT-4o for prompt generation
+            api_name = "gpt-4o"
+            
+            # Import here to avoid circular import
+            from ..core.constants import PROMPT_GENERATION_PLACEHOLDER
+            
+            messages = [
+                SystemMessage(content=PROMPT_GENERATION_PLACEHOLDER),
+                UserMessage(content="Task, Goal, or Current Prompt:\n" + user_description)
+            ]
+            
+            response = self.client.complete(
+                messages=messages,
+                model=api_name
+            )
+            
+            return response.choices[0].message.content.strip()
+            
+        except Exception as e:
+            logger.error(f"Error generating system prompt: {e}")
+            raise RuntimeError(f"Failed to generate system prompt: {str(e)}")
+
     def validate_model_availability(self, model_names: List[str]) -> Tuple[List[str], List[str]]:
         """Validate which models are available."""
         available = []

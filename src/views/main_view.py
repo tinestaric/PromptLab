@@ -12,7 +12,7 @@ from ..core.constants import *
 def show_main_view():
     """Main application function."""
     # Render page header
-    UIComponents.render_page_header(APP_TITLE, APP_DESCRIPTION)
+    UIComponents.render_page_header(APP_TITLE, '')
     
     # Get settings from config
     visible_models = config_manager.get_visible_models()

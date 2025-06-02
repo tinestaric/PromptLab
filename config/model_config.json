@@ -6,5 +6,6 @@
   ],
   "max_tokens": 1000,
   "show_pricing": true,
-  "comparison_mode": false
+  "comparison_mode": false,
+  "generate_prompt_enabled": true
 }

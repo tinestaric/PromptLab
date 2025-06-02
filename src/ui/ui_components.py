@@ -13,9 +13,25 @@ class UIComponents:
     @staticmethod
     def render_prompt_inputs() -> Tuple[str, str]:
         """Render prompt input components."""
-        st.subheader("System Prompt")
+        from ..core.config_manager import config_manager
+        from ..core.constants import GENERATE_PROMPT_BUTTON_TEXT
+        
+        # System Prompt section with Generate Prompt button
+        col1, col2 = st.columns([3, 1])
+        with col1:
+            st.subheader("System Prompt")
+        with col2:
+            # Show Generate Prompt button only if enabled in admin settings
+            if config_manager.get_generate_prompt_enabled():
+                if st.button(GENERATE_PROMPT_BUTTON_TEXT, key="generate_prompt_btn"):
+                    # Clear the prompt description field when opening the modal
+                    if "prompt_description" in st.session_state:
+                        del st.session_state.prompt_description
+                    UIComponents._show_generate_prompt_modal()
+        
         system_prompt = st.text_area(
             "Enter your system prompt here",
+            label_visibility='collapsed',            
             height=150,
             placeholder="You are a helpful AI assistant...",
             key="system_prompt"
@@ -24,12 +40,51 @@ class UIComponents:
         st.subheader("User Prompt")
         user_prompt = st.text_area(
             "Enter your user prompt here",
+            label_visibility='collapsed',
             height=150,
             placeholder="What would you like to ask the AI?",
             key="user_prompt"
         )
         
         return system_prompt, user_prompt
+    
+    @staticmethod
+    def _show_generate_prompt_modal():
+        """Show the generate prompt modal dialog."""
+        from ..core.constants import PROMPT_DESCRIPTION_PLACEHOLDER
+        from ..services.azure_ai_service import azure_ai_service
+        
+        # Use Streamlit's modal functionality
+        @st.dialog("Generate System Prompt")
+        def generate_prompt_dialog():           
+            user_description = st.text_area(
+                "Prompt Description",
+                placeholder=PROMPT_DESCRIPTION_PLACEHOLDER,
+                height=100,
+                key="prompt_description"
+            )
+            
+            col1, col2 = st.columns(2)
+            with col1:
+                if st.button("Generate", disabled=not user_description.strip()):
+                    if user_description.strip():
+                        try:
+                            with st.spinner("Generating system prompt..."):
+                                generated_prompt = azure_ai_service.generate_system_prompt(user_description=user_description)
+                            
+                            # Automatically use the generated prompt and close modal
+                            st.session_state.system_prompt = generated_prompt
+                            st.success("System prompt generated and applied!")
+                            st.rerun()
+                                
+                        except Exception as e:
+                            st.error(f"Failed to generate prompt: {str(e)}")
+            
+            with col2:
+                if st.button("Cancel"):
+                    st.rerun()
+        
+        generate_prompt_dialog()
     
     @staticmethod
     def render_model_parameters(
@@ -119,7 +174,6 @@ class UIComponents:
                 st.caption("Projected costs:")
                 for scale, cost in projected.items():
                     st.caption(f"{scale}: ${cost:.4f}")
-    
     @staticmethod
     def render_error(error_message: str) -> None:
         """Render an error message."""
@@ -146,9 +200,12 @@ class UIComponents:
         all_models: List[str],
         max_tokens: int,
         show_pricing: bool,
-        comparison_mode: bool
-    ) -> Tuple[List[str], int, bool, bool]:
+        comparison_mode: bool,
+        generate_prompt_enabled: bool
+    ) -> Tuple[List[str], int, bool, bool, bool]:
         """Render admin control panel."""
+        from ..core.constants import GENERATE_PROMPT_HELP
+        
         st.subheader("Model Settings")
         selected_models = st.multiselect(
             "Select models visible to users",
@@ -176,7 +233,14 @@ class UIComponents:
             help="Allow users to run the same prompt across all visible models"
         )
         
-        return selected_models, new_max_tokens, new_show_pricing, new_comparison_mode
+        st.subheader("Feature Settings")
+        new_generate_prompt_enabled = st.checkbox(
+            "Enable AI-powered prompt generation",
+            value=generate_prompt_enabled,
+            help=GENERATE_PROMPT_HELP
+        )
+        
+        return selected_models, new_max_tokens, new_show_pricing, new_comparison_mode, new_generate_prompt_enabled
     
     @staticmethod
     def render_page_header(title: str, description: str) -> None:
