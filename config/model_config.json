@@ -1,0 +1,10 @@
+{
+  "visible_models": [
+    "gpt-4.1",
+    "gpt-4.1-nano",
+    "GPT-4o-mini"
+  ],
+  "max_tokens": 1000,
+  "show_pricing": true,
+  "comparison_mode": false
+}
