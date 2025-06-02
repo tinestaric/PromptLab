@@ -172,6 +172,46 @@ class AzureAIService:
             logger.error(f"Error generating system prompt: {e}")
             raise RuntimeError(f"Failed to generate system prompt: {str(e)}")
 
+    def edit_system_prompt(
+        self,
+        existing_prompt: str,
+        change_description: str
+    ) -> str:
+        """Edit an existing system prompt based on change description using GPT-4o."""
+        try:
+            # Always use GPT-4o for prompt editing
+            api_name = "gpt-4o"
+            
+            # Import here to avoid circular import
+            from ..core.constants import EDIT_PROMPT_GENERATION_PLACEHOLDER
+            
+            messages = [
+                SystemMessage(content=EDIT_PROMPT_GENERATION_PLACEHOLDER),
+                UserMessage(content=f"Current Prompt:\n{existing_prompt}\n\nChange Description:\n{change_description}")
+            ]
+            
+            response = self.client.complete(
+                messages=messages,
+                model=api_name
+            )
+            
+            raw_response = response.choices[0].message.content.strip()
+            
+            # Strip the reasoning section if present
+            if raw_response.startswith('<reasoning>'):
+                # Find the end of the reasoning section
+                end_reasoning = raw_response.find('</reasoning>')
+                if end_reasoning != -1:
+                    # Extract everything after the closing reasoning tag
+                    cleaned_response = raw_response[end_reasoning + len('</reasoning>'):].strip()
+                    return cleaned_response
+            
+            return raw_response
+            
+        except Exception as e:
+            logger.error(f"Error editing system prompt: {e}")
+            raise RuntimeError(f"Failed to edit system prompt: {str(e)}")
+
     def validate_model_availability(self, model_names: List[str]) -> Tuple[List[str], List[str]]:
         """Validate which models are available."""
         available = []

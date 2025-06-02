@@ -14,16 +14,20 @@ class UIComponents:
     def render_prompt_inputs() -> Tuple[str, str]:
         """Render prompt input components."""
         from ..core.config_manager import config_manager
-        from ..core.constants import GENERATE_PROMPT_BUTTON_TEXT
+        from ..core.constants import GENERATE_PROMPT_BUTTON_TEXT, EDIT_PROMPT_BUTTON_TEXT
         
-        # System Prompt section with Generate Prompt button
+        # System Prompt section with Generate/Edit Prompt button
         col1, col2 = st.columns([3, 1])
         with col1:
             st.subheader("System Prompt")
         with col2:
-            # Show Generate Prompt button only if enabled in admin settings
+            # Show Generate/Edit Prompt button only if enabled in admin settings
             if config_manager.get_generate_prompt_enabled():
-                if st.button(GENERATE_PROMPT_BUTTON_TEXT, key="generate_prompt_btn"):
+                # Check if system prompt exists to determine button text
+                has_system_prompt = bool(st.session_state.get("system_prompt", "").strip())
+                button_text = EDIT_PROMPT_BUTTON_TEXT if has_system_prompt else GENERATE_PROMPT_BUTTON_TEXT
+                
+                if st.button(button_text, key="generate_prompt_btn"):
                     # Clear the prompt description field when opening the modal
                     if "prompt_description" in st.session_state:
                         del st.session_state.prompt_description
@@ -51,34 +55,58 @@ class UIComponents:
     @staticmethod
     def _show_generate_prompt_modal():
         """Show the generate prompt modal dialog."""
-        from ..core.constants import PROMPT_DESCRIPTION_PLACEHOLDER
+        from ..core.constants import (
+            PROMPT_DESCRIPTION_PLACEHOLDER, 
+            EDIT_PROMPT_DESCRIPTION_PLACEHOLDER,
+            EDIT_PROMPT_GENERATION_PLACEHOLDER
+        )
         from ..services.azure_ai_service import azure_ai_service
         
+        # Check if we're editing an existing prompt
+        has_system_prompt = bool(st.session_state.get("system_prompt", "").strip())
+        is_editing = has_system_prompt
+        
         # Use Streamlit's modal functionality
-        @st.dialog("Generate System Prompt")
+        modal_title = "Edit System Prompt" if is_editing else "Generate System Prompt"
+        placeholder_text = EDIT_PROMPT_DESCRIPTION_PLACEHOLDER if is_editing else PROMPT_DESCRIPTION_PLACEHOLDER
+        
+        @st.dialog(modal_title)
         def generate_prompt_dialog():           
             user_description = st.text_area(
                 "Prompt Description",
-                placeholder=PROMPT_DESCRIPTION_PLACEHOLDER,
+                placeholder=placeholder_text,
                 height=100,
                 key="prompt_description"
             )
             
             col1, col2 = st.columns(2)
             with col1:
-                if st.button("Generate", disabled=not user_description.strip()):
+                button_text = "Edit" if is_editing else "Generate"
+                if st.button(button_text, disabled=not user_description.strip()):
                     if user_description.strip():
                         try:
-                            with st.spinner("Generating system prompt..."):
-                                generated_prompt = azure_ai_service.generate_system_prompt(user_description=user_description)
+                            with st.spinner(f"{'Editing' if is_editing else 'Generating'} system prompt..."):
+                                if is_editing:
+                                    # Use edit prompt meta prompt (placeholder for now)
+                                    # This will need the edit prompt generation method
+                                    generated_prompt = azure_ai_service.edit_system_prompt(
+                                        existing_prompt=st.session_state.get("system_prompt", ""),
+                                        change_description=user_description
+                                    )
+                                else:
+                                    # Use generate prompt meta prompt
+                                    generated_prompt = azure_ai_service.generate_system_prompt(
+                                        user_description=user_description
+                                    )
                             
                             # Automatically use the generated prompt and close modal
                             st.session_state.system_prompt = generated_prompt
-                            st.success("System prompt generated and applied!")
+                            success_message = "System prompt edited and applied!" if is_editing else "System prompt generated and applied!"
+                            st.success(success_message)
                             st.rerun()
                                 
                         except Exception as e:
-                            st.error(f"Failed to generate prompt: {str(e)}")
+                            st.error(f"Failed to {'edit' if is_editing else 'generate'} prompt: {str(e)}")
             
             with col2:
                 if st.button("Cancel"):
@@ -126,6 +154,7 @@ class UIComponents:
         """Render a single model response."""
         st.text_area(
             "Response",
+            label_visibility='collapsed',
             value=response.content,
             height=300,
             disabled=True,
@@ -159,7 +188,7 @@ class UIComponents:
     def _render_token_usage(response: ModelResponse, show_pricing: bool, compact: bool = False) -> None:
         """Render token usage information."""
         usage = response.usage
-        token_info = f"Tokens: {usage.prompt_tokens} + {usage.completion_tokens} = {usage.total_tokens}"
+        token_info = f"Tokens: {usage.prompt_tokens} (input) + {usage.completion_tokens} (output) = {usage.total_tokens}"
         
         if show_pricing and response.cost is not None:
             token_info += f" | Cost: ${response.cost:.6f}"
