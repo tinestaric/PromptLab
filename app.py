@@ -3,6 +3,7 @@ import logging
 from dotenv import load_dotenv
 from src.views.main_view import show_main_view
 from src.views.admin_view import show_admin_view
+from src.views.chain_view import show_chain_view
 from src.core.constants import *
 
 # Load environment variables
@@ -46,6 +47,8 @@ def main():
         show_main_view()
     elif view == "admin":
         show_admin_view()
+    elif view == "chain":
+        show_chain_view()
     else:
         st.error(f"Unknown view: '{view}'")
 

@@ -12,7 +12,7 @@ ADMIN_PAGE_TITLE = "Admin Controls - Prompt Engineering Workshop"
 ADMIN_PAGE_ICON = "🔒"
 
 # View Configuration
-VALID_VIEWS = ["main", "admin"]
+VALID_VIEWS = ["main", "admin", "chain"]
 DEFAULT_VIEW = "main"
 
 # Default Configuration Values
