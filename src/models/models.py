@@ -49,32 +49,32 @@ class ModelRegistry:
         models_data = {
             "DeepSeek-R1": {
                 "api_name": "deepseek-r1",
-                "pricing": ModelPricing(0.0005, 0.0015),
+                "pricing": ModelPricing(0.00120, 0.00478),
                 "description": "DeepSeek R1 reasoning model"
             },
             "DeepSeek-V3-0324": {
                 "api_name": "DeepSeek-V3-0324",
-                "pricing": ModelPricing(0.0005, 0.0015),
+                "pricing": ModelPricing(0.00101, 0.00404),
                 "description": "DeepSeek V3 model"
             },
             "gpt-4.1": {
                 "api_name": "gpt-4.1",
-                "pricing": ModelPricing(0.005, 0.015),
+                "pricing": ModelPricing(0.00177, 0.00708),
                 "description": "GPT-4.1 model"
             },
             "gpt-4.1-nano": {
                 "api_name": "gpt-4.1-nano",
-                "pricing": ModelPricing(0.0005, 0.0015),
+                "pricing": ModelPricing(0.00009, 0.00036),
                 "description": "GPT-4.1 Nano model"
             },
             "GPT-4o": {
                 "api_name": "gpt-4o",
-                "pricing": ModelPricing(0.005, 0.015),
+                "pricing": ModelPricing(0.002212, 0.008848),
                 "description": "GPT-4o model"
             },
             "GPT-4o-mini": {
                 "api_name": "gpt-4o-mini",
-                "pricing": ModelPricing(0.0005, 0.0015),
+                "pricing": ModelPricing(0.00013272, 0.0005309),
                 "description": "GPT-4o Mini model"
             },
             "Llama-4-Scout-17B-16E-Instr": {
@@ -89,27 +89,27 @@ class ModelRegistry:
             },
             "O1": {
                 "api_name": "o1",
-                "pricing": ModelPricing(0.003, 0.009),
+                "pricing": ModelPricing(0.0132720, 0.053087950),
                 "description": "OpenAI O1 model"
             },
             "O3": {
                 "api_name": "o3",
-                "pricing": ModelPricing(0.004, 0.012),
+                "pricing": ModelPricing(0.00885, 0.03540),
                 "description": "OpenAI O3 model"
             },
             "O3-mini": {
                 "api_name": "o4-mini",
-                "pricing": ModelPricing(0.0005, 0.0015),
+                "pricing": ModelPricing(0.00098, 0.00390),
                 "description": "OpenAI O3 Mini model"
             },
             "Phi-4": {
                 "api_name": "phi-4",
-                "pricing": ModelPricing(0.0005, 0.0015),
+                "pricing": ModelPricing(0.000111, 0.00045),
                 "description": "Microsoft Phi-4 model"
             },
             "Phi-4-mini-reasoning": {
                 "api_name": "Phi-4-mini-reasoning",
-                "pricing": ModelPricing(0.0005, 0.0015),
+                "pricing": ModelPricing(0.000067, 0.00027),
                 "description": "Microsoft Phi-4 Mini Reasoning model"
             }
         }
