@@ -77,8 +77,8 @@ class ModelRegistry:
                 "pricing": ModelPricing(0.00013272, 0.0005309),
                 "description": "GPT-4o Mini model"
             },
-            "Llama-4-Scout-17B-16E-Instr": {
-                "api_name": "Llama-4-Scout-17B-16E-Instr",
+            "Llama-4-Scout-17B-16E-Instruct": {
+                "api_name": "Llama-4-Scout-17B-16E-Instruct",
                 "pricing": ModelPricing(0.001, 0.003),
                 "description": "Llama 4 Scout model"
             },
@@ -97,10 +97,10 @@ class ModelRegistry:
                 "pricing": ModelPricing(0.00885, 0.03540),
                 "description": "OpenAI O3 model"
             },
-            "O3-mini": {
+            "o4-mini": {
                 "api_name": "o4-mini",
                 "pricing": ModelPricing(0.00098, 0.00390),
-                "description": "OpenAI O3 Mini model"
+                "description": "OpenAI o4 Mini model"
             },
             "Phi-4": {
                 "api_name": "phi-4",
