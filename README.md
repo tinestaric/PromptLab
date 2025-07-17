@@ -10,21 +10,39 @@ git clone <repository-url>
 cd PromptLab
 ```
 
-2. **Run the setup script**
+2. **Install dependencies**
 ```bash
-python scripts/setup.py
+pip install -r requirements.txt
 ```
 
-3. **Configure your environment**
-   - Copy `.env.example` to `.env`
-   - Add your Azure OpenAI credentials:
+3. **Create environment file**
+   - Copy `.env.example` to `.env` and add your Azure OpenAI credentials:
 ```env
 AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com/
 AZURE_OPENAI_KEY=your-api-key-here
 ADMIN_PASSWORD=your-secure-admin-password
 ```
 
-4. **Start the application**
+4. **Configure models**
+   - Edit `config/models.json` with your Azure deployment details
+   - Example structure:
+```json
+{
+  "models": {
+    "YourModelName": {
+      "api_name": "your-deployment-name",
+      "input_price": 0.002,
+      "output_price": 0.006,
+      "description": "Your model description"
+    }
+  }
+}
+```
+   - Required: `api_name` must match your Azure deployment name exactly
+   - Optional: `input_price`/`output_price` for cost tracking, `description` for display
+   - Get deployment names from Azure OpenAI Studio → Deployments
+
+5. **Run the application**
 ```bash
 streamlit run app.py
 ```
@@ -36,6 +54,9 @@ PromptLab/
 ├── app.py                      # Main routing application
 ├── requirements.txt            # Python dependencies
 ├── config/                     # Configuration files
+│   ├── models.json            # Model definitions and pricing
+│   ├── logging.yaml           # Logging configuration
+│   └── model_config.json      # Runtime model settings
 ├── src/                       # Source code
 │   ├── core/                  # Core functionality
 │   ├── models/                # Model definitions
@@ -44,27 +65,17 @@ PromptLab/
 │   └── views/                 # Application views
 │       ├── main_view.py       # Main user interface
 │       └── admin_view.py      # Admin interface
-├── tests/                     # Test files
-├── docs/                      # Documentation
-├── scripts/                   # Utility scripts
-└── logs/                      # Application logs
 ```
 
 ## ✨ Features
 
-- **Interactive Prompt Testing**: Test system and user prompts with various models
-- **Model Comparison**: Side-by-side comparison of responses from multiple models
+- **Interactive Prompt Testing**: Test prompts with various Azure OpenAI models
+- **Model Comparison**: Compare responses from multiple models side-by-side
 - **Cost Tracking**: Real-time cost calculation and projections
-- **URL-Based Admin Access**: Hidden admin interface accessible only via URL parameter
-- **Admin Controls**: Manage visible models, pricing visibility, and token limits
-- **Modern Architecture**: Clean, maintainable code with proper separation of concerns
+- **Admin Interface**: Access via `?view=admin` using password from `.env` file
+- **Chain View**: Access prompt chaining via `?view=chain`
 
 ## 🛠️ Development
-
-### Running Tests
-```bash
-python -m pytest tests/ -v
-```
 
 ### Code Structure
 - **`src/core/`**: Configuration management and constants
@@ -72,24 +83,9 @@ python -m pytest tests/ -v
 - **`src/services/`**: Azure AI service integration
 - **`src/ui/`**: Reusable UI components
 
-### Adding New Models
-1. Add model information to `src/models/models.py`
-2. Include pricing information
-3. The model will automatically appear in the admin interface
-
-## 📚 Documentation
-
-- [API Documentation](docs/API.md)
-- [Project Structure](docs/PROJECT_STRUCTURE.md)
-- [Refactoring Guide](docs/REFACTORING.md)
-
 ## 🔧 Configuration
 
-The application uses a JSON configuration file (`config/model_config.json`) and environment variables for settings. All configuration can be managed through the admin interface.
-
-## 🚀 Deployment
-
-See [Deployment Guide](docs/DEPLOYMENT.md) for production deployment instructions.
+Configure models in `config/models.json` and settings in `.env`. Admin interface available via `?view=admin`.
 
 ## 📄 License
 

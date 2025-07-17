@@ -5,6 +5,8 @@ Provides structured access to model information and cost calculations.
 from dataclasses import dataclass
 from typing import Dict, List, Optional
 import logging
+import json
+import os
 
 logger = logging.getLogger(__name__)
 
@@ -45,72 +47,47 @@ class ModelRegistry:
         self._initialize_models()
     
     def _initialize_models(self) -> None:
-        """Initialize the model registry with available models."""
+        """Initialize the model registry with available models from JSON configuration."""
+        try:
+            # Get the path to the config directory
+            current_dir = os.path.dirname(os.path.abspath(__file__))
+            config_dir = os.path.join(os.path.dirname(os.path.dirname(current_dir)), 'config')
+            models_file = os.path.join(config_dir, 'models.json')
+            
+            if not os.path.exists(models_file):
+                logger.warning(f"Models configuration file not found at {models_file}. Using default models.")
+                self._load_default_models()
+                return
+            
+            with open(models_file, 'r', encoding='utf-8') as f:
+                models_config = json.load(f)
+            
+            models_data = models_config.get('models', {})
+            
+            for display_name, model_data in models_data.items():
+                self._models[display_name] = ModelInfo(
+                    display_name=display_name,
+                    api_name=model_data["api_name"],
+                    pricing=ModelPricing(
+                        input_price=model_data["input_price"],
+                        output_price=model_data["output_price"]
+                    ),
+                    description=model_data.get("description")
+                )
+            
+            logger.info(f"Loaded {len(self._models)} models from configuration file")
+            
+        except Exception as e:
+            logger.error(f"Error loading models configuration: {e}. Using default models.")
+            self._load_default_models()
+    
+    def _load_default_models(self) -> None:
+        """Load default models as fallback."""
         models_data = {
-            "DeepSeek-R1": {
-                "api_name": "deepseek-r1",
-                "pricing": ModelPricing(0.00120, 0.00478),
-                "description": "DeepSeek R1 reasoning model"
-            },
-            "DeepSeek-V3-0324": {
-                "api_name": "DeepSeek-V3-0324",
-                "pricing": ModelPricing(0.00101, 0.00404),
-                "description": "DeepSeek V3 model"
-            },
-            "gpt-4.1": {
-                "api_name": "gpt-4.1",
-                "pricing": ModelPricing(0.00177, 0.00708),
-                "description": "GPT-4.1 model"
-            },
-            "gpt-4.1-nano": {
-                "api_name": "gpt-4.1-nano",
-                "pricing": ModelPricing(0.00009, 0.00036),
-                "description": "GPT-4.1 Nano model"
-            },
-            "GPT-4o": {
-                "api_name": "gpt-4o",
-                "pricing": ModelPricing(0.002212, 0.008848),
-                "description": "GPT-4o model"
-            },
             "GPT-4o-mini": {
                 "api_name": "gpt-4o-mini",
                 "pricing": ModelPricing(0.00013272, 0.0005309),
-                "description": "GPT-4o Mini model"
-            },
-            "Llama-4-Scout-17B-16E-Instruct": {
-                "api_name": "Llama-4-Scout-17B-16E-Instruct",
-                "pricing": ModelPricing(0.001, 0.003),
-                "description": "Llama 4 Scout model"
-            },
-            "mistral-medium-2505": {
-                "api_name": "mistral-medium-2505",
-                "pricing": ModelPricing(0.002, 0.006),
-                "description": "Mistral Medium model"
-            },
-            "O1": {
-                "api_name": "o1",
-                "pricing": ModelPricing(0.0132720, 0.053087950),
-                "description": "OpenAI O1 model"
-            },
-            "O3": {
-                "api_name": "o3",
-                "pricing": ModelPricing(0.00885, 0.03540),
-                "description": "OpenAI O3 model"
-            },
-            "o4-mini": {
-                "api_name": "o4-mini",
-                "pricing": ModelPricing(0.00098, 0.00390),
-                "description": "OpenAI o4 Mini model"
-            },
-            "Phi-4": {
-                "api_name": "phi-4",
-                "pricing": ModelPricing(0.000111, 0.00045),
-                "description": "Microsoft Phi-4 model"
-            },
-            "Phi-4-mini-reasoning": {
-                "api_name": "Phi-4-mini-reasoning",
-                "pricing": ModelPricing(0.000067, 0.00027),
-                "description": "Microsoft Phi-4 Mini Reasoning model"
+                "description": "GPT-4o Mini model (default fallback)"
             }
         }
         

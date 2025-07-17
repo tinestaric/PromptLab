@@ -1,0 +1,82 @@
+{
+  "models": {
+    "DeepSeek-R1": {
+      "api_name": "deepseek-r1",
+      "input_price": 0.00120,
+      "output_price": 0.00478,
+      "description": "DeepSeek R1 reasoning model"
+    },
+    "DeepSeek-V3-0324": {
+      "api_name": "DeepSeek-V3-0324",
+      "input_price": 0.00101,
+      "output_price": 0.00404,
+      "description": "DeepSeek V3 model"
+    },
+    "gpt-4.1": {
+      "api_name": "gpt-4.1",
+      "input_price": 0.00177,
+      "output_price": 0.00708,
+      "description": "GPT-4.1 model"
+    },
+    "gpt-4.1-nano": {
+      "api_name": "gpt-4.1-nano",
+      "input_price": 0.00009,
+      "output_price": 0.00036,
+      "description": "GPT-4.1 Nano model"
+    },
+    "GPT-4o": {
+      "api_name": "gpt-4o",
+      "input_price": 0.002212,
+      "output_price": 0.008848,
+      "description": "GPT-4o model"
+    },
+    "GPT-4o-mini": {
+      "api_name": "gpt-4o-mini",
+      "input_price": 0.00013272,
+      "output_price": 0.0005309,
+      "description": "GPT-4o Mini model"
+    },
+    "Llama-4-Scout-17B-16E-Instruct": {
+      "api_name": "Llama-4-Scout-17B-16E-Instruct",
+      "input_price": 0.001,
+      "output_price": 0.003,
+      "description": "Llama 4 Scout model"
+    },
+    "mistral-medium-2505": {
+      "api_name": "mistral-medium-2505",
+      "input_price": 0.002,
+      "output_price": 0.006,
+      "description": "Mistral Medium model"
+    },
+    "O1": {
+      "api_name": "o1",
+      "input_price": 0.0132720,
+      "output_price": 0.053087950,
+      "description": "OpenAI O1 model"
+    },
+    "O3": {
+      "api_name": "o3",
+      "input_price": 0.00885,
+      "output_price": 0.03540,
+      "description": "OpenAI O3 model"
+    },
+    "o4-mini": {
+      "api_name": "o4-mini",
+      "input_price": 0.00098,
+      "output_price": 0.00390,
+      "description": "OpenAI o4 Mini model"
+    },
+    "Phi-4": {
+      "api_name": "phi-4",
+      "input_price": 0.000111,
+      "output_price": 0.00045,
+      "description": "Microsoft Phi-4 model"
+    },
+    "Phi-4-mini-reasoning": {
+      "api_name": "Phi-4-mini-reasoning",
+      "input_price": 0.000067,
+      "output_price": 0.00027,
+      "description": "Microsoft Phi-4 Mini Reasoning model"
+    }
+  }
+}
