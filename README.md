@@ -16,12 +16,13 @@ pip install -r requirements.txt
 ```
 
 3. **Create environment file**
-   - Copy `.env.example` to `.env` and add your Azure OpenAI credentials:
+   - Copy `.env.example` to `.env` and add your Azure AI Foundry credentials:
 ```env
-AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com/
+AZURE_OPENAI_ENDPOINT=https://your-resource-name.services.ai.azure.com/models
 AZURE_OPENAI_KEY=your-api-key-here
 ADMIN_PASSWORD=your-secure-admin-password
 ```
+   - Note: Use Azure AI inference endpoint, not the standard OpenAI endpoint
 
 4. **Configure models**
    - Edit `config/models.json` with your Azure deployment details
