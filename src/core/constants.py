@@ -19,7 +19,6 @@ DEFAULT_VIEW = "main"
 DEFAULT_VISIBLE_MODELS = ["GPT-4o"]
 DEFAULT_MAX_TOKENS = 1000
 DEFAULT_SHOW_PRICING = False
-DEFAULT_COMPARISON_MODE = False
 DEFAULT_TEMPERATURE = 0.7
 DEFAULT_ADMIN_PASSWORD = "admin123"
 DEFAULT_GENERATE_PROMPT_ENABLED = False
@@ -52,7 +51,6 @@ ENV_ADMIN_PASSWORD = "ADMIN_PASSWORD"
 
 TEMPERATURE_HELP = "Higher values make the output more random, lower values make it more deterministic"
 MAX_TOKENS_HELP_TEMPLATE = "Maximum number of tokens to generate (up to {max_tokens})"
-COMPARISON_MODE_HELP = "Allow users to run the same prompt across all visible models"
 ADMIN_MAX_TOKENS_HELP = "Set the maximum number of tokens users can generate"
 GENERATE_PROMPT_HELP = "Enable AI-powered system prompt generation for users"
 
@@ -172,7 +170,3 @@ EDIT_PROMPT_DESCRIPTION_PLACEHOLDER = "What would you like to change?"
 
 NO_RESPONSE_MESSAGE = "Enter your prompts and click 'Generate Response' to see the output here."
 ADMIN_SETTINGS_SAVED = "Settings saved!"
-
-# Column Layouts
-SINGLE_MODE_COLUMNS = [1, 1]
-COMPARISON_MODE_COLUMNS = [1, 2]

@@ -117,18 +117,15 @@ class UIComponents:
     @staticmethod
     def render_model_parameters(
         visible_models: List[str],
-        max_tokens: int,
-        comparison_mode: bool
+        max_tokens: int
     ) -> Tuple[Optional[str], float, int]:
         """Render model parameter controls."""
         st.subheader("Model Parameters")
         
-        selected_model = None
-        if not comparison_mode:
-            selected_model = st.selectbox(
-                "Select Model",
-                options=visible_models
-            )
+        selected_model = st.selectbox(
+            "Select Model",
+            options=visible_models
+        )
         
         temperature = st.slider(
             "Temperature",
@@ -229,9 +226,8 @@ class UIComponents:
         all_models: List[str],
         max_tokens: int,
         show_pricing: bool,
-        comparison_mode: bool,
         generate_prompt_enabled: bool
-    ) -> Tuple[List[str], int, bool, bool, bool]:
+    ) -> Tuple[List[str], int, bool, bool]:
         """Render admin control panel."""
         from ..core.constants import GENERATE_PROMPT_HELP
         
@@ -256,12 +252,6 @@ class UIComponents:
             value=show_pricing
         )
         
-        new_comparison_mode = st.checkbox(
-            "Enable side-by-side model comparison",
-            value=comparison_mode,
-            help="Allow users to run the same prompt across all visible models"
-        )
-        
         st.subheader("Feature Settings")
         new_generate_prompt_enabled = st.checkbox(
             "Enable AI-powered prompt generation",
@@ -269,7 +259,7 @@ class UIComponents:
             help=GENERATE_PROMPT_HELP
         )
         
-        return selected_models, new_max_tokens, new_show_pricing, new_comparison_mode, new_generate_prompt_enabled
+        return selected_models, new_max_tokens, new_show_pricing, new_generate_prompt_enabled
     
     @staticmethod
     def render_page_header(title: str, description: str) -> None:

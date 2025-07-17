@@ -98,14 +98,6 @@ class ConfigManager:
         """Set the maximum allowed tokens."""
         self.set('max_tokens', max_tokens)
     
-    def get_comparison_mode(self) -> bool:
-        """Get whether comparison mode is enabled."""
-        return self.get('comparison_mode', False)
-    
-    def set_comparison_mode(self, enabled: bool) -> None:
-        """Set whether comparison mode is enabled."""
-        self.set('comparison_mode', enabled)
-    
     def get_generate_prompt_enabled(self) -> bool:
         """Get whether the generate prompt feature is enabled."""
         return self.get('generate_prompt_enabled', False)
@@ -135,12 +127,6 @@ def get_max_tokens() -> int:
 
 def set_max_tokens(max_tokens: int) -> None:
     config_manager.set_max_tokens(max_tokens)
-
-def get_comparison_mode() -> bool:
-    return config_manager.get_comparison_mode()
-
-def set_comparison_mode(enabled: bool) -> None:
-    config_manager.set_comparison_mode(enabled)
 
 def get_generate_prompt_enabled() -> bool:
     return config_manager.get_generate_prompt_enabled()

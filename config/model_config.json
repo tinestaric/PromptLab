@@ -4,6 +4,5 @@
   ],
   "max_tokens": 2000,
   "show_pricing": true,
-  "comparison_mode": false,
   "generate_prompt_enabled": false
 }
